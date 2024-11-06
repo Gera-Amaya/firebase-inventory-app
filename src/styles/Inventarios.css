@@ -1,0 +1,62 @@
+/* src/styles/Inventarios.css */
+
+/* Estilo para el contenedor principal */
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin: 20px 0;
+  color: #333;
+}
+
+/* Estilo para la tabla */
+table {
+  width: 80%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Encabezado de la tabla */
+thead th {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+/* Celdas de la tabla */
+tbody td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.9rem;
+}
+
+/* Alternar colores de filas */
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Cambiar color al pasar el mouse */
+tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Estados de inventario */
+td.status-min {
+  color: #d9534f;
+  font-weight: bold;
+}
+td.status-reorder {
+  color: #f0ad4e;
+  font-weight: bold;
+}
+td.status-max {
+  color: #5bc0de;
+  font-weight: bold;
+}
+td.status-ok {
+  color: #5cb85c;
+  font-weight: bold;
+}

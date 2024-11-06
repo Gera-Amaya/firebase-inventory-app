@@ -1,0 +1,33 @@
+.settings-container {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .settings-option {
+    margin-bottom: 20px;
+  }
+  
+  .settings-option label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .settings-option select,
+  .settings-option input {
+    font-size: 16px;
+    padding: 8px;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .settings-option span {
+    margin-left: 10px;
+  }
+  

@@ -1,0 +1,55 @@
+/* src/styles/Navbar.css */
+nav {
+  background-color: #333; /* Color de fondo */
+  padding: 1rem; /* Espaciado */
+  display: flex; /* Usar flexbox para un mejor alineamiento */
+  align-items: center; /* Centrar elementos verticalmente */
+}
+
+nav h1 {
+  color: white; /* Color del título */
+  margin-right: 20px; /* Espacio a la derecha */
+  font-size: 1.5rem; /* Tamaño del texto */
+  font-weight: bold; /* Hacer el texto más destacado */
+}
+
+nav ul {
+  list-style-type: none; /* Quitar los puntos de la lista */
+  padding: 0; /* Quitar padding */
+  margin: 0; /* Quitar margen */
+  display: flex; /* Usar flexbox para los elementos de la lista */
+}
+
+nav ul li {
+  margin-right: 15px; /* Espacio entre los elementos */
+}
+
+nav ul li a {
+  color: white; /* Color de los enlaces */
+  text-decoration: none; /* Sin subrayado */
+  padding: 8px 12px; /* Espaciado interno para el enlace */
+  transition: background-color 0.3s ease; /* Transición suave al cambiar color */
+}
+
+nav ul li a:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* Efecto al pasar el ratón */
+  border-radius: 4px; /* Bordes redondeados al hover */
+}
+
+.logout-container {
+  margin-left: auto; /* Empujar el botón al lado derecho */
+}
+
+.logout-button {
+  background-color: #f44336; /* Color de fondo del botón */
+  color: white; /* Color del texto */
+  border: none; /* Sin borde */
+  padding: 10px 15px; /* Espaciado interno */
+  cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+  border-radius: 4px; /* Bordes redondeados para el botón */
+  transition: background-color 0.3s ease; /* Transición suave al cambiar color */
+}
+
+.logout-button:hover {
+  background-color: #d32f2f; /* Color al pasar el ratón */
+}

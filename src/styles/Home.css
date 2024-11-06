@@ -1,0 +1,88 @@
+/* Contenedor principal de la página de inicio */
+.home-container {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #f4f4f9;
+    color: #333;
+    min-height: 50vh;
+  }
+  
+  /* Estilos para el encabezado de bienvenida */
+  .home-header h1 {
+    font-size: 2.5rem;
+    color: #282c34;
+    margin-bottom: 20px;
+  }
+  
+  .home-header p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 30px;
+  }
+  
+  /* Contenedor de los botones de navegación */
+  .home-buttons {
+    margin-top: 20px;
+  }
+  
+  /* Botones/enlaces de navegación */
+  .home-link {
+    display: inline-block;
+    margin: 10px;
+    padding: 12px 24px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .home-link:hover {
+    background-color: #575757;
+  }
+  
+  /* Sección de información adicional */
+  .home-info {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .home-info h2 {
+    font-size: 2rem;
+    color: #282c34;
+    margin-bottom: 20px;
+  }
+  
+  .home-info ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .home-info li {
+    font-size: 1.1rem;
+    color: #666;
+    margin: 10px 0;
+  }
+  
+  /* Responsiveness: Adjusts for smaller screens */
+  @media (max-width: 768px) {
+    .home-header h1 {
+      font-size: 2rem;
+    }
+  
+    .home-header p {
+      font-size: 1rem;
+    }
+  
+    .home-info h2 {
+      font-size: 1.5rem;
+    }
+  
+    .home-info li {
+      font-size: 1rem;
+    }
+  }
+  
