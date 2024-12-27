@@ -55,7 +55,7 @@ const Login = ({ onLogin }) => {
           />
         </div>
         <br />
-        <button type="submit">Iniciar Sesión</button>
+        <button className='login-botton-1' type="submit">Iniciar Sesión</button>
       </form>
     </div>
   );

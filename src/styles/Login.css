@@ -14,7 +14,7 @@
   
   .login-container h1 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
   
   .login-form .form-group {
@@ -34,7 +34,7 @@
     border-radius: 5px;
   }
   
-  button {
+  .login-button-1 button {
     width: 100%;
     padding: 10px;
     background-color: #2061a5;
@@ -44,7 +44,7 @@
     cursor: pointer;
   }
   
-  button:hover {
+  .login-button button:hover {
     background-color: #487ab0;
   }
   

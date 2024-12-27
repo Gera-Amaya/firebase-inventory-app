@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { db } from '../components/firebase';
-import { collection, getDocs, updateDoc, doc, addDoc, Timestamp } from 'firebase/firestore';
-import '../styles/Inventarios.css';
+import { db, auth } from '../components/firebase';
+import { collection, getDocs, updateDoc, doc, addDoc, serverTimestamp } from 'firebase/firestore';
+import '../styles/AdminInventario.css';
 
-const AdminInventario = ({ isAdmin }) => {
+const AdminInventario = () => {
   const [materials, setMaterials] = useState([]);
-  const [editMode, setEditMode] = useState(null);
-  const [editQuantity, setEditQuantity] = useState(0);
+  const [updatedQuantities, setUpdatedQuantities] = useState({}); // Estado para las cantidades ingresadas
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchMaterials = async () => {
@@ -16,93 +16,111 @@ const AdminInventario = ({ isAdmin }) => {
         id: doc.id,
         ...doc.data(),
       }));
+
       setMaterials(materialList);
+
+      // Inicializar updatedQuantities con las cantidades actuales de cada material
+      const initialQuantities = materialList.reduce((acc, material) => {
+        acc[material.id] = material.quantity || '';
+        return acc;
+      }, {});
+      setUpdatedQuantities(initialQuantities);
     };
 
     fetchMaterials();
   }, []);
 
-  const handleEdit = (material) => {
-    setEditMode(material.id);
-    setEditQuantity(material.quantity);
+  const handleQuantityChange = (id, newQuantity) => {
+    // Validar y actualizar las cantidades ingresadas
+    const updatedValue = newQuantity === '' ? '' : parseFloat(newQuantity) || '';
+    setUpdatedQuantities(prevQuantities => ({
+      ...prevQuantities,
+      [id]: updatedValue,
+    }));
   };
 
-  const handleSave = async (material) => {
-    const materialRef = doc(db, 'materials', material.id);
-    await updateDoc(materialRef, { quantity: editQuantity });
+  const handleUpdateAll = async () => {
+    setIsLoading(true);
 
-    // Log the change in the consumptionHistory collection
-    await addDoc(collection(db, 'consumptionHistory'), {
-      materialId: material.id,
-      quantity: editQuantity - material.quantity,
-      type: editQuantity > material.quantity ? 'entrada' : 'salida',
-      timestamp: Timestamp.now(),
-      userId: 'adminUserId', // Replace with the actual admin user ID
-    });
+    try {
+      const updatePromises = materials.map(async (material) => {
+        const materialRef = doc(db, 'materials', material.id);
+        const newQuantity = updatedQuantities[material.id];
 
-    setMaterials(materials.map(mat => mat.id === material.id ? { ...mat, quantity: editQuantity } : mat));
-    setEditMode(null);
+        // Verificar si hay una cantidad nueva válida
+        if (newQuantity === '' || isNaN(newQuantity)) return;
+
+        const consumption = material.quantity - newQuantity;
+
+        // Registrar tanto consumos como ingresos en el historial
+        await addDoc(collection(db, 'historial'), {
+          materialId: material.id,
+          previousQuantity: material.quantity,
+          newQuantity: newQuantity,
+          tipoMovimiento: consumption > 0 ? 'Consumo' : 'Ingreso',
+          consumo: consumption > 0 ? consumption : null,
+          ingreso: consumption < 0 ? Math.abs(consumption) : null,
+          modifiedBy: auth.currentUser ? auth.currentUser.email : 'Anónimo',
+          timestamp: serverTimestamp(),
+        });
+
+        // Actualizar la cantidad en el inventario
+        return updateDoc(materialRef, { quantity: newQuantity });
+      });
+
+      await Promise.all(updatePromises);
+      alert('Inventario actualizado correctamente.');
+      setUpdatedQuantities({});
+    } catch (error) {
+      console.error('Error al actualizar el inventario:', error);
+      alert('Hubo un error al actualizar el inventario.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleCancel = () => {
-    setEditMode(null);
-  };
+  // Verificar si todas las casillas están vacías
+  const isButtonDisabled = Object.values(updatedQuantities).every(value => value === '');
 
   return (
-    <div>
-      <h1>Admin: Inventario de Materiales</h1>
-      <table>
+    <div className="admin-inventario-container">
+      <h1>Actualizar Inventario</h1>
+      <table className="admin-inventario-table">
         <thead>
           <tr>
             <th>Material</th>
-            <th>Cantidad</th>
-            <th>Unidad</th>
-            <th>Estado</th>
-            {isAdmin && <th>Acciones</th>}
+            <th>Cantidad Actual</th>
+            <th>Nueva Cantidad</th>
           </tr>
         </thead>
         <tbody>
           {materials.map(material => (
             <tr key={material.id}>
               <td>{material.name}</td>
+              <td>{material.quantity}</td>
               <td>
-                {editMode === material.id ? (
-                  <input
-                    type="number"
-                    value={editQuantity}
-                    onChange={(e) => setEditQuantity(parseInt(e.target.value))}
-                  />
-                ) : (
-                  material.quantity
-                )}
+                <input
+                  type="number"
+                  step="0.01" // Permitir decimales
+                  value={updatedQuantities[material.id] || ''} // Asegurarse de que se muestre el valor actualizado
+                  onChange={(e) => handleQuantityChange(material.id, e.target.value)}
+                  placeholder="Nueva cantidad"
+                  min="0"
+                />
               </td>
-              <td>{material.quantity > 1000 ? 'Kg' : 'Kg'}</td>
-              <td>{getInventoryStatus(material)}</td>
-              {isAdmin && (
-                <td>
-                  {editMode === material.id ? (
-                    <>
-                      <button onClick={() => handleSave(material)}>Guardar</button>
-                      <button onClick={handleCancel}>Cancelar</button>
-                    </>
-                  ) : (
-                    <button onClick={() => handleEdit(material)}>Editar</button>
-                  )}
-                </td>
-              )}
             </tr>
           ))}
         </tbody>
       </table>
+      <button
+        className="admin-inventario-button"
+        onClick={handleUpdateAll}
+        disabled={isLoading || isButtonDisabled}
+      >
+        {isLoading ? 'Actualizando...' : 'Cargar Inventario'}
+      </button>
     </div>
   );
-};
-
-const getInventoryStatus = (material) => {
-  if (material.quantity <= material.minQuantity) return 'Min';
-  if (material.quantity <= material.reorderLevel) return 'Reorder';
-  if (material.quantity >= material.maxQuantity) return 'Max';
-  return 'Ok';
 };
 
 export default AdminInventario;

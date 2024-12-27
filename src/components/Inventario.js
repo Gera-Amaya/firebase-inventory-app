@@ -25,7 +25,7 @@ const Inventario = () => {
     if (quantity <= minLevel) {
       return "Mínimo";
     } else if (quantity <= reorderLevel) {
-      return "Punto de Reorden";
+      return "Re-orden";
     } else if (quantity >= maxLevel) {
       return "Máximo";
     } else {

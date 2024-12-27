@@ -1,0 +1,35 @@
+.admin-inventario-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.admin-inventario-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.admin-inventario-table th,
+.admin-inventario-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.admin-inventario-table th {
+  background-color: #f4f4f4;
+}
+
+.admin-inventario-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.admin-inventario-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
